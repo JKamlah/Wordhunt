@@ -4,7 +4,7 @@ from collections import defaultdict
 import sys
 import regex
 
-def wordhunt(fpath,pattern,error=1):
+def wordhunt(fpath,pattern,error=1,verbose="all"):
     fpath = Path(fpath)
     jsonres = defaultdict(list)
     for fname in sorted(fpath.rglob("*.pdf")):
@@ -12,11 +12,16 @@ def wordhunt(fpath,pattern,error=1):
         for idx, line in enumerate(text.splitlines()):
 
             for res in regex.finditer(f"({pattern}){{e<={error}}}", line):
-                print(f"File:   {fname}\n"
-                      f"Line:   {idx}\n"
-                      f"Text:   {line[:res.span()[0]]+'>>'+line[res.span()[0]:res.span()[1]]+'<<'+line[res.span()[1]:]}\n"
-                      f"--------{'-'*len(line)}")
+                if verbose in ["all","single"]:
+                    print(f"File:   {fname}\n"
+                        f"Line:   {idx}\n"
+                        f"Text:   {line[:res.span()[0]]+'>>'+line[res.span()[0]:res.span()[1]]+'<<'+line[res.span()[1]:]}\n"
+                        f"--------{'-'*len(line)}")
                 jsonres[str(fname)].append({"Line":idx,"Text":line[:res.span()[0]]+'>>'+line[res.span()[0]:res.span()[1]]+'<<'+line[res.span()[1]:]})
+    if verbose in ["all","list"]:
+        print(f"List of all PDFs with findings:")
+        for key in jsonres:
+            print(key)
     return jsonres
 
 if __name__ == "__main__":
