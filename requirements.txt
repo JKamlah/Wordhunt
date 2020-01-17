@@ -1,3 +1,5 @@
 pdfminer.six
+textract
+python-pptx
 regex
 pytest
