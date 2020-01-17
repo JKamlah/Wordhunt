@@ -1,3 +1,3 @@
 Wordhunt
 
-Fuzzy search for words in pdffiles
+Fuzzy search for words in text containing files.
